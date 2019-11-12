@@ -1,5 +1,5 @@
 /* Database Schema */ 
-
+/* TODO: ADD MORE CONSTRAINTS */ 
 /* User Table */ 
 CREATE TABLE User(
 	email VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -53,17 +53,65 @@ CREATE TABLE Inventory(
 ); 
 
 /* CPU Table */ 
+CREATE TABLE Cpu( /* ? */ 
+	partNo INT NOT NULL PRIMARY KEY,
+    coreCount INT,
+    coreClock DECIMAL(2,1), 
+    thermalDesignPower INT,
+    socket VARCHAR(10), /* ? */ 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo) 
+);
 
 /* Cooler Table */ 
+CREATE TABLE Cooler(
+	partNo INT NOT NULL PRIMARY KEY, 
+    type VARCHAR(30), /* ? */
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+); 
 
 /* Memory Table */ 
-
+CREATE TABLE Memory(
+	partNo INT NOT NULL PRIMARY KEY, 
+    capacity INT, 
+    speed VARCHAR(30),
+    quantity INT, 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+);
 /* Motherboard Table */ 
+CREATE TABLE Motherboard(
+	partNo INT NOT NULL PRIMARY KEY, 
+    socket VARCHAR(10), 
+    ramSlot INT, 
+    maxRam INT,
+	FOREIGN KEY(partNo) REFERENCES Part(partNo)
+);
 
 /* GraphicsCard Table */ 
+CREATE TABLE GraphicsCard(
+	partNo INT NOT NULL PRIMARY KEY, 
+    gpuChipset VARCHAR(30), 
+    memoryCapacity INT,
+    coreClock INT, 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+); 
 
 /* Storage Table */ 
-
+CREATE TABLE Storage(
+	partNo INT NOT NULL PRIMARY KEY, 
+    type VARCHAR(30), 
+    capacity INT, 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+); 
 /* PowerSupply Table */
-
+CREATE TABLE PowerSupply(
+	partNo INT NOT NULL PRIMARY KEY, 
+    wattage INT, 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+);
 /* Case Table */ 
+CREATE TABLE Case(
+	partNo INT NOT NULL PRIMARY KEY, 
+    type VARCHAR(30),
+    hasSideWindow VARCHAR(3), /* Make it have only yes/no ? */ 
+    FOREIGN KEY(partNo) REFERENCES Part(partNo)
+); 

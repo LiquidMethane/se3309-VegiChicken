@@ -7,6 +7,12 @@ CREATE TABLE User(
     user_password VARCHAR(30) /* Not sure about this one */ 
 ); 
 
+/* Part Table */ 
+CREATE TABLE Part(
+	partNo INT NOT NULL PRIMARY KEY,
+	partName VARCHAR(50)
+);
+
 /* UserFavouritePart Table */ 
 CREATE TABLE UserFavouritePart(
 	userEmail VARCHAR(50) NOT NULL,
@@ -18,8 +24,8 @@ CREATE TABLE UserFavouritePart(
 
 /* Build Table */ 
 CREATE TABLE Build(
-	buildNo INT NOT NULL PRIMARY KEY, 
-    partName VARCHAR(50), 
+	buildNo INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    buildName VARCHAR(50) NOT NULL,
     userEmail VARCHAR(50),
     FOREIGN KEY(userEmail) REFERENCES User(email)
 );
@@ -33,23 +39,19 @@ CREATE TABLE BuildPart(
     FOREIGN KEY(partNo) REFERENCES Part(partNo) 
 );
 
-/* Part Table */ 
-CREATE TABLE Part(
-	partNo INT NOT NULL PRIMARY KEY
-);
-
 /* Store Table */ 
 CREATE TABLE Store(
-	storeName VARCHAR(50) NOT NULL PRIMARY KEY
+	storeNo INT NOT NULL PRIMARY KEY,
+    storeName VARCHAR(50) NOT NULL
 );
 
 /* Inventory Table */ 
 CREATE TABLE Inventory(
 	partNo INT NOT NULL, 
-    storeName VARCHAR(50) NOT NULL, 
+    storeNo VARCHAR(50) NOT NULL, 
     price DECIMAL(7,2), 
-    inventoryDate DATE,
-    PRIMARY KEY(partNo, storeName, inventoryDate)
+    inventoryDate DATE NOT NULL,
+    PRIMARY KEY(partNo, storeNo, inventoryDate)
 ); 
 
 /* CPU Table */ 
@@ -70,7 +72,7 @@ CREATE TABLE Cooler(
 ); 
 
 /* Memory Table */ 
-CREATE TABLE ComputerMemory(
+CREATE TABLE Memory(
 	partNo INT NOT NULL PRIMARY KEY, 
     capacity INT, 
     speed VARCHAR(30),
@@ -96,7 +98,7 @@ CREATE TABLE GraphicsCard(
 ); 
 
 /* Storage Table */ 
-CREATE TABLE ComputerStorage(
+CREATE TABLE Storage(
 	partNo INT NOT NULL PRIMARY KEY, 
     type VARCHAR(30), 
     capacity INT, 

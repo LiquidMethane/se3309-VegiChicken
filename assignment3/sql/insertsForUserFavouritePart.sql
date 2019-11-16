@@ -10,17 +10,34 @@ SELECT 'testUser2@example.com', m.partNo
 FROM Memory as m, Inventory as i
 WHERE m.partNo = i.partNo AND price < 100.00 ;
 
+/* Insert Favourite parts for a user that are in the user's builds */ 
+-- TODO: Needs to be tested with more data
+INSERT INTO UserFavouritePart 
+SELECT 'testUser3@example.com', builds.partNo
+FROM 
+	(SELECT bp.partNo, email FROM BuildPart as bp, User as u, Build as b
+	WHERE bp.buildNo = b.buildNo AND u.email = b.userEmail
+	GROUP BY bp.buildNo) as builds
+WHERE builds.email = 'testUser3@example.com'; 
+
+
 /* TODO: For Testing, delete later*/
 -- SELECT count(*) FROM userfavouritepart;
-
+-- select * from userfavouritepart; 
 -- insert into user 
--- values ('testUser2@example.com', 'Bobby', 'my_password123'); 
+-- values ('testUser3@example.com', 'Jimmy', 'my_password123'); 
+
+-- insert into build 
+-- values(3000, 'My Build', 'testUser3@example.com');
+
+-- insert into buildpart
+-- values (3000, 222333); 
 
 -- insert into part 
--- values(123456, 'aMemeory'); 
+-- values(222333, 'another Memory'); 
 
 -- insert into memory 
--- values (123456, NULL, NULL, NULL); 
+-- values (222333, NULL, NULL, NULL); 
 
 -- insert into store
 -- values(1, 'A Store'); 

@@ -53,7 +53,7 @@ CREATE TABLE Inventory(
 ); 
 
 /* CPU Table */ 
-CREATE TABLE Cpu( /* ? */ 
+CREATE TABLE ComputerCpu( /* ? */ 
 	partNo INT NOT NULL PRIMARY KEY,
     coreCount INT,
     coreClock DECIMAL(2,1), 
@@ -70,7 +70,7 @@ CREATE TABLE Cooler(
 ); 
 
 /* Memory Table */ 
-CREATE TABLE Memory(
+CREATE TABLE ComputerMemory(
 	partNo INT NOT NULL PRIMARY KEY, 
     capacity INT, 
     speed VARCHAR(30),
@@ -96,7 +96,7 @@ CREATE TABLE GraphicsCard(
 ); 
 
 /* Storage Table */ 
-CREATE TABLE Storage(
+CREATE TABLE ComputerStorage(
 	partNo INT NOT NULL PRIMARY KEY, 
     type VARCHAR(30), 
     capacity INT, 
@@ -109,7 +109,7 @@ CREATE TABLE PowerSupply(
     FOREIGN KEY(partNo) REFERENCES Part(partNo)
 );
 /* Case Table */ 
-CREATE TABLE Case(
+CREATE TABLE ComputerCase(
 	partNo INT NOT NULL PRIMARY KEY, 
     type VARCHAR(30),
     hasSideWindow VARCHAR(3), /* Make it have only yes/no ? */ 

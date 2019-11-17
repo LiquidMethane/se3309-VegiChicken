@@ -1,46 +1,21 @@
-/* INSERT commands for Build relation */ 
+/* INSERT commands for UserFavouritePart relation */ 
 
-/* Simple */ 
+/* Simple Insert - a specific user and part number*/ 
 INSERT INTO UserFavouritePart
-VALUES ('testuser@example.com', 54321);
+VALUES ('1', 10040);
 
-/* Insert favourite parts for a user that are memory and where an inventory with a price less than $100 exists for that part  */
+/* Insert any favourite parts for a user that are Memory and where an inventory with a price less than $100 exists for that part  */
 INSERT INTO UserFavouritePart
-SELECT 'testUser2@example.com', m.partNo
-FROM Memory as m, Inventory as i
-WHERE m.partNo = i.partNo AND price < 100.00 ;
+SELECT '1', m.partNo
+FROM Memory as m
+WHERE EXISTS(SELECT * FROM Inventory as i 
+			 WHERE m.partNo = i.partNo AND price < 100.00) ;
 
-/* Insert Favourite parts for a user that are in the user's builds */ 
--- TODO: Needs to be tested with more data
+/* Insert Favourite parts for a user that are in any of the user's builds and aren't already in their favourites */
 INSERT INTO UserFavouritePart 
-SELECT 'testUser3@example.com', builds.partNo
-FROM 
-	(SELECT bp.partNo, email FROM BuildPart as bp, User as u, Build as b
-	WHERE bp.buildNo = b.buildNo AND u.email = b.userEmail
-	GROUP BY bp.buildNo) as builds
-WHERE builds.email = 'testUser3@example.com'; 
-
-
-/* TODO: For Testing, delete later*/
--- SELECT count(*) FROM userfavouritepart;
--- select * from userfavouritepart; 
--- insert into user 
--- values ('testUser3@example.com', 'Jimmy', 'my_password123'); 
-
--- insert into build 
--- values(3000, 'My Build', 'testUser3@example.com');
-
--- insert into buildpart
--- values (3000, 222333); 
-
--- insert into part 
--- values(222333, 'another Memory'); 
-
--- insert into memory 
--- values (222333, NULL, NULL, NULL); 
-
--- insert into store
--- values(1, 'A Store'); 
-
--- insert into inventory
--- values (123456, 1, 75.00, '2019-06-05') 
+SELECT '164', p.partNo
+FROM Part as p
+WHERE (EXISTS
+	(SELECT bp.partNo, u.userId FROM BuildPart as bp, User as u, Build as b
+	WHERE bp.buildNo = b.buildNo AND u.userId = 164 and p.partNo = bp.partNo)
+    AND NOT EXISTS(SELECT partNo FROM UserFavouritePart as ufp WHERE userId = 164 AND ufp.partNo = p.partNo))

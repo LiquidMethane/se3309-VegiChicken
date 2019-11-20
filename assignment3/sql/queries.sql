@@ -1,10 +1,43 @@
-select storeNo, sum(price) as total
-from 
-	(select storeNo, partNo, price
-	from inventory inner join (select * from buildpart inner join build using (buildNo) ) as parts using (partNo)
-	where inventory.inventoryDate = '2019-12-01' and price > 0 and buildNo = 3
-	order by storeNo, buildNo, partNo) as storePartprice
-group by storeNo
-having count(partNo) = 8
-order by total asc
-limit 1;
+-- first query: find the name of the store that yields the lowest price for all the parts that are in a certain build
+-- works
+select storeName, total
+from store inner join 
+	(select storeNo, sum(price) as total
+	from 
+		(select storeNo, partNo, price
+		from inventory inner join 
+			(select * from buildpart inner join build using (buildNo) ) as parts using (partNo)
+		where inventory.inventoryDate = '2019-12-01' and price > 0 and buildNo = 233
+		order by storeNo, buildNo, partNo) as storePartprice
+	group by storeNo
+	having count(partNo) = 8
+	order by total asc
+	limit 1) 
+as mininalPriceStore using (storeNo);
+
+-- second query: find the most popular 10 parts (featured in most builds)
+-- works
+select partName, count(partNo) as occurance
+from buildpart inner join part using (partNo)
+group by partNo
+order by occurance desc
+-- order by count(partNo) desc
+limit 10;
+
+-- third query: find all the parts that currently have the lowest price among all historical prices
+
+
+
+-- fourth query: show all builds for a certain user
+-- works
+select buildNo, buildName, partName
+from build inner join buildpart using (buildNo) inner join part using (partNo)
+where userId = 233;
+
+-- fifth query: find all stores that have a certain part in stock
+-- works
+select storeNo, storeName
+from inventory inner join store using (storeNo)
+where inventoryDate = '2019-12-01' and price > 0 and partNo = 10582;
+
+

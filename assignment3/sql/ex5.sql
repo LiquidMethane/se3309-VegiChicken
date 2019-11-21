@@ -7,10 +7,9 @@ from store inner join
 		(select storeNo, partNo, price
 		from inventory inner join 
 			(select * from buildpart inner join build using (buildNo) ) as parts using (partNo)
-		where inventory.inventoryDate = '2019-12-01' and price > 0 and buildNo = 233
+		where inventory.inventoryDate = '2019-12-01' and price > 0 and buildNo = 1
 		order by storeNo, buildNo, partNo) as storePartprice
 	group by storeNo
-	having count(partNo) = 8
 	order by total asc
 	limit 1) 
 as mininalPriceStore using (storeNo);
@@ -27,12 +26,15 @@ limit 10;
 
 select p.partNo, p.partName, s.storeNo, s.storeName, price
 from inventory as inv, store as s, part as p
-where inventoryDate = '2019-12-01' and s.storeNo = inv.storeNo and p.partNo = inv.partNo and (inv.partNo, price) in 
-	(select partNo, min(price)
-	from inventory
-	where price > 0
-	group by partNo
-	order by partNo, price asc);
+where inventoryDate = '2019-12-01' 
+	and s.storeNo = inv.storeNo 
+	and p.partNo = inv.partNo 
+    and (inv.partNo, price) in 
+		(select partNo, min(price)
+		from inventory
+		where price > 0
+		group by partNo
+		order by partNo, price asc);
 
 
 -- fourth query: show all builds and parts for a certain user
@@ -47,12 +49,10 @@ select storeNo, storeName
 from inventory inner join store using (storeNo)
 where inventoryDate = '2019-12-01' and price > 0 and partNo = 10582;
 
--- sixth query: find users who has more than 30 favourite parts
+-- sixth query: find users who has more than 40 favourite parts
 -- works
 select userId, userNickname, count(partNo) as numFavPart
 from user left join userfavouritepart using (userId)
 group by userId
-having numFavPart > 30
+having numFavPart > 40
 order by userId;
-
-

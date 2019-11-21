@@ -1,5 +1,4 @@
 /* Database Schema */ 
-/* TODO: ADD MORE CONSTRAINTS */ 
 /* User Table */ 
 
 CREATE SCHEMA `builder_paradise` ;
